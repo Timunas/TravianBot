@@ -16,7 +16,8 @@ public class BotRunner {
         try {
             travianBot = new TravianBot("http://ts2.travian.pt");
             travianBot.login("jenkins","pilas");
-            travianBot.closeBrowser();
+
+            travianBot.getFields("Bosque");
         } catch (MalformedURLException e) {
             LOG.error("Invalid address!", e .getMessage());
         }
