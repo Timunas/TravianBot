@@ -23,6 +23,7 @@ public class TravianBot{
 
     /** Private Variables **/
     private WebDriver webDriver;
+    private String serverAddress;
 
     /** Constructor **/
     public TravianBot(String serverAddress) throws MalformedURLException {
@@ -31,6 +32,7 @@ public class TravianBot{
         System.setProperty("webdriver.chrome.driver", "D:\\SeleniumDrivers\\chromedriver.exe");
         webDriver = new ChromeDriver();
         webDriver.navigate().to(new URL(serverAddress));
+        this.serverAddress=serverAddress;
     }
 
     /** Close Browser **/
@@ -50,16 +52,57 @@ public class TravianBot{
 
 
     /** Retrieves Hashmap of all field elements and each one level **/
-    public HashMap<WebElement,String> getFields(String fieldType){
+    public HashMap<WebElement,Integer> getFields(String fieldType){
         List<WebElement> listOfFieldElements = webDriver.findElements(By.xpath("//area[contains(@alt,'"+fieldType+"')]"));
-        HashMap<WebElement,String> fieldMap = new HashMap<WebElement, String>();
+        HashMap<WebElement,Integer> fieldMap = new HashMap<WebElement, Integer>();
         for (WebElement element : listOfFieldElements){
             String level = element.getAttribute("alt");
-            fieldMap.put(element,level.substring(level.lastIndexOf(" ")+1));
+            fieldMap.put(element,Integer.valueOf(level.substring(level.lastIndexOf(" ")+1)));
         }
         return fieldMap;
     }
 
 
+    /** Start construction of lowest level field **/
+    public void construcField(String fieldType){
+        LOG.info("Construction event: "+fieldType);
+        HashMap<WebElement,Integer> fieldMap = getFields(fieldType);
+        boolean found = false;
+        String link="error";
+        for(int level=0 ; level<21 ; level++){
+            for(WebElement key : fieldMap.keySet()){
+                if(fieldMap.get(key)==level){
+                    found = true;
+                    link = key.getAttribute("href");
+                    break;
+                }
+            }
+            if(found)
+                break;
+        }
+
+        try {
+            webDriver.navigate().to(new URL(link));
+        } catch (MalformedURLException e) {
+            LOG.error("Failed to change to field construction page");
+        }
+
+        if(isConstructionPossible()) {
+            webDriver.findElement(By.xpath("//button[@class='green build']")).click();
+            LOG.info("Construction started...");
+        }
+
+    }
+
+    /** Evaluate if construction is possible **/
+    public boolean isConstructionPossible(){
+        try {
+            webDriver.findElement(By.xpath("//button[@class='green build']"));
+        }catch(Exception e){
+            LOG.info("Can't construct now...");
+            return false;
+        }
+        return true;
+    }
 
 }
