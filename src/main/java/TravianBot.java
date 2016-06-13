@@ -4,8 +4,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,16 +25,14 @@ public class TravianBot{
 
     /** Private Variables **/
     private WebDriver webDriver;
-    private String serverAddress;
 
     /** Constructor **/
     public TravianBot(String serverAddress) throws MalformedURLException {
         LOG.info("Bot initiated!");
-        //webDriver = new FirefoxDriver(); NOT WROKING FOR NOW
-        System.setProperty("webdriver.chrome.driver", "D:\\SeleniumDrivers\\chromedriver.exe");
-        webDriver = new ChromeDriver();
+        System.setProperty("webdriver.gecko.driver","D:\\SeleniumDrivers\\wires.exe");
+        LOG.info(System.getProperty("webdriver.gecko.driver"));
+        webDriver=new MarionetteDriver();
         webDriver.navigate().to(new URL(serverAddress));
-        this.serverAddress=serverAddress;
     }
 
     /** Close Browser **/

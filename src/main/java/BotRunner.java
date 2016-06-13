@@ -16,11 +16,13 @@ public class BotRunner {
         try {
             travianBot = new TravianBot("http://ts2.travian.pt");
             travianBot.login("jenkins","pilas");
-
+            Thread.sleep(1000);
             travianBot.construcField("Bosque");
 
         } catch (MalformedURLException e) {
             LOG.error("Invalid address!", e .getMessage());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
