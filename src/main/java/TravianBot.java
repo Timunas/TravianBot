@@ -3,11 +3,8 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.MarionetteDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
+
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -48,6 +45,24 @@ public class TravianBot{
         LOG.info("Password written!");
         webDriver.findElement(By.id("s1")).click();
         LOG.info("Login button clicked!");
+    }
+
+    /** Change to inside Village - Buildings View **/
+    public void goToBuildingsView(){
+        webDriver.findElement(By.xpath("//li[@class=\"villageBuildings\"]/a")).click();
+        LOG.info("Changed to Buildings view!");
+    }
+
+    /** Change to outside Village - Resources View **/
+    public void goToResourcesView(){
+        webDriver.findElement(By.xpath("//li[@class=\"villageResources\"]/a")).click();
+        LOG.info("Changed to Resources view!");
+    }
+
+    /** Message Box **/
+    public void goToMessageBox(){
+        webDriver.findElement(By.xpath("//li[@class=\"messages\"]/a")).click();
+        LOG.info("Changed to Message Box!");
     }
 
 
