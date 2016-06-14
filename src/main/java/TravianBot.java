@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -29,12 +30,15 @@ public class TravianBot{
         System.setProperty("webdriver.gecko.driver","D:\\SeleniumDrivers\\wires.exe");
         LOG.info(System.getProperty("webdriver.gecko.driver"));
         webDriver=new MarionetteDriver();
+        //Set implicit wait
+        webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         webDriver.navigate().to(new URL(serverAddress));
     }
 
     /** Close Browser **/
     public void closeBrowser(){
         webDriver.close();
+        webDriver.quit();
     }
 
     /** Login into Account **/
@@ -49,21 +53,26 @@ public class TravianBot{
 
     /** Change to inside Village - Buildings View **/
     public void goToBuildingsView(){
-        webDriver.findElement(By.xpath("//li[@class=\"villageBuildings\"]/a")).click();
+        webDriver.findElement(By.xpath("//li[@class='villageBuildings']/a")).click();
         LOG.info("Changed to Buildings view!");
     }
 
     /** Change to outside Village - Resources View **/
     public void goToResourcesView(){
-        webDriver.findElement(By.xpath("//li[@class=\"villageResources\"]/a")).click();
+        webDriver.findElement(By.xpath("//li[@class='villageResources']/a")).click();
         LOG.info("Changed to Resources view!");
     }
 
     /** Message Box **/
     public void goToMessageBox(){
-        webDriver.findElement(By.xpath("//li[@class=\"messages\"]/a")).click();
+        webDriver.findElement(By.xpath("//li[@class='messages']/a")).click();
         LOG.info("Changed to Message Box!");
     }
+
+
+    /**
+     * ===========================================FIELDS================================================================
+     */
 
 
     /** Retrieves Hashmap of all field elements and each one level **/
@@ -115,6 +124,26 @@ public class TravianBot{
             webDriver.findElement(By.xpath("//button[@class='green build']"));
         }catch(Exception e){
             LOG.info("Can't construct now...");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * ===========================================Buildings=============================================================
+     */
+
+    public void goToInfrastructures(){
+        webDriver.findElement(By.xpath("//div[contains(@class, 'container infrastructure')]//div[@class='content']/a")).click();
+        LOG.info("Changed to infrastructure list!");
+    }
+
+    public boolean goToEmptyBuildingSlot(){
+        try{
+            String link = webDriver.findElement(By.xpath("//map[@id='clickareas']/area[contains(@alt,'zona para construção')]")).getAttribute("href");
+            webDriver.navigate().to(new URL(link));
+        }catch(Exception e){
+            LOG.info("There is no empty slot for building construction...");
             return false;
         }
         return true;

@@ -18,7 +18,10 @@ public class BotRunner {
             travianBot.login("jenkins","pilas");
             Thread.sleep(1000);
             travianBot.goToBuildingsView();
-
+            travianBot.goToEmptyBuildingSlot();
+            travianBot.goToInfrastructures();
+            Thread.sleep(10000);
+            travianBot.closeBrowser();
         } catch (MalformedURLException e) {
             LOG.error("Invalid address!", e .getMessage());
         } catch (InterruptedException e) {
