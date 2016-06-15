@@ -16,10 +16,10 @@ public class BotRunner {
         try {
             travianBot = new TravianBot("http://ts2.travian.pt");
             travianBot.login("jenkins","pilas");
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             travianBot.goToBuildingsView();
             travianBot.goToEmptyBuildingSlot();
-            travianBot.goToInfrastructures();
+            travianBot.newBuilding(Infrastructure.Barn);
             Thread.sleep(10000);
             travianBot.closeBrowser();
         } catch (MalformedURLException e) {

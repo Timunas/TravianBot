@@ -30,8 +30,8 @@ public class TravianBot{
         System.setProperty("webdriver.gecko.driver","D:\\SeleniumDrivers\\wires.exe");
         LOG.info(System.getProperty("webdriver.gecko.driver"));
         webDriver=new MarionetteDriver();
-        //Set implicit wait
-        webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        //Set implicit wait for elements
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.navigate().to(new URL(serverAddress));
     }
 
@@ -76,8 +76,8 @@ public class TravianBot{
 
 
     /** Retrieves Hashmap of all field elements and each one level **/
-    public HashMap<WebElement,Integer> getFields(String fieldType){
-        List<WebElement> listOfFieldElements = webDriver.findElements(By.xpath("//area[contains(@alt,'"+fieldType+"')]"));
+    public HashMap<WebElement,Integer> getFields(FieldType fieldType){
+        List<WebElement> listOfFieldElements = webDriver.findElements(By.xpath("//area[contains(@alt,'"+fieldType.toString()+"')]"));
         HashMap<WebElement,Integer> fieldMap = new HashMap<WebElement, Integer>();
         for (WebElement element : listOfFieldElements){
             String level = element.getAttribute("alt");
@@ -88,8 +88,8 @@ public class TravianBot{
 
 
     /** Start construction of lowest level field **/
-    public void construcField(String fieldType){
-        LOG.info("Construction event: "+fieldType);
+    public void construcField(FieldType fieldType){
+        LOG.info("Construction event: "+fieldType.toString());
         HashMap<WebElement,Integer> fieldMap = getFields(fieldType);
         boolean found = false;
         String link="error";
@@ -138,12 +138,39 @@ public class TravianBot{
         LOG.info("Changed to infrastructure list!");
     }
 
+    public void goToMilitaryBuildings(){
+        webDriver.findElement(By.xpath("//div[contains(@class, 'container military')]//div[@class='content']/a")).click();
+        LOG.info("Changed to military buildings list!");
+    }
+
+    public void goToResourceBuildings(){
+        webDriver.findElement(By.xpath("//div[contains(@class, 'container resources')]//div[@class='content']/a")).click();
+        LOG.info("Changed to resource buildings list!");
+    }
+
     public boolean goToEmptyBuildingSlot(){
         try{
             String link = webDriver.findElement(By.xpath("//map[@id='clickareas']/area[contains(@alt,'zona para construção')]")).getAttribute("href");
             webDriver.navigate().to(new URL(link));
         }catch(Exception e){
             LOG.info("There is no empty slot for building construction...");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean newBuilding(Object building){
+
+        if(building instanceof Infrastructure)
+            goToInfrastructures();
+        else if( building instanceof  MilitaryBuilding)
+            goToMilitaryBuildings();
+        else
+            goToResourceBuildings();
+        try{
+            webDriver.findElement(By.xpath("//div[@class='buildingWrapper']/h2[contains(text(), '"+building.toString()+"')]")).findElement(By.xpath("//button[@class='green new']")).click();
+        }catch(Exception e){
+            LOG.info("Couldn't start construction of building: "+building.toString());
             return false;
         }
         return true;
