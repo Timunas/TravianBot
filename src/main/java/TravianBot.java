@@ -22,7 +22,7 @@ public class TravianBot{
     private Logger LOG = LogManager.getLogger(getClass().getSimpleName());
 
     /** Private Variables **/
-    private WebDriver webDriver;
+    private final WebDriver webDriver;
 
     /** Constructor **/
     public TravianBot(String serverAddress) throws MalformedURLException {
