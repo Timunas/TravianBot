@@ -3,6 +3,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.MarionetteDriver;
 
 
@@ -27,9 +28,10 @@ public class TravianBot{
     /** Constructor **/
     public TravianBot(String serverAddress) throws MalformedURLException {
         LOG.info("Bot initiated!");
-        System.setProperty("webdriver.gecko.driver","D:\\SeleniumDrivers\\wires.exe");
-        LOG.info(System.getProperty("webdriver.gecko.driver"));
-        webDriver=new MarionetteDriver();
+//        System.setProperty("webdriver.gecko.driver","D:\\SeleniumDrivers\\wires.exe");
+//        LOG.info(System.getProperty("webdriver.gecko.driver"));
+//        webDriver=new MarionetteDriver();
+        webDriver = new FirefoxDriver();
         //Set implicit wait for elements
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.navigate().to(new URL(serverAddress));
@@ -133,21 +135,25 @@ public class TravianBot{
      * ===========================================Buildings=============================================================
      */
 
+    /** Go to View that lists all infrastructures that could be built **/
     public void goToInfrastructures(){
         webDriver.findElement(By.xpath("//div[contains(@class, 'container infrastructure')]//div[@class='content']/a")).click();
         LOG.info("Changed to infrastructure list!");
     }
 
+    /** Go to View that lists all military buildings that could be built **/
     public void goToMilitaryBuildings(){
         webDriver.findElement(By.xpath("//div[contains(@class, 'container military')]//div[@class='content']/a")).click();
         LOG.info("Changed to military buildings list!");
     }
 
+    /** Go to View that lists all resource buildings that could be built **/
     public void goToResourceBuildings(){
         webDriver.findElement(By.xpath("//div[contains(@class, 'container resources')]//div[@class='content']/a")).click();
         LOG.info("Changed to resource buildings list!");
     }
 
+    /** Move to one Empty building Slot **/
     public boolean goToEmptyBuildingSlot(){
         try{
             String link = webDriver.findElement(By.xpath("//map[@id='clickareas']/area[contains(@alt,'zona para construção')]")).getAttribute("href");
@@ -159,6 +165,7 @@ public class TravianBot{
         return true;
     }
 
+    /** Method that starts construction of a new building **/
     public boolean newBuilding(Object building){
 
         if(building instanceof Infrastructure)
@@ -172,6 +179,24 @@ public class TravianBot{
         }catch(Exception e){
             LOG.info("Couldn't start construction of building: "+building.toString());
             return false;
+        }
+        return true;
+    }
+
+    /** Method that starts to upgrade one building **/
+    public boolean upgradeBuilding(Object building){
+
+        try{
+            String link = webDriver.findElement(By.xpath("//map[@id='clickareas']/area[contains(@alt,'"+building.toString()+"')]")).getAttribute("href");
+            webDriver.navigate().to(new URL(link));
+        }catch(Exception e){
+            LOG.info("Couldn't start construction of building: "+building.toString());
+            return false;
+        }
+
+        if(isConstructionPossible()) {
+            webDriver.findElement(By.xpath("//button[@class='green build']")).click();
+            LOG.info("Started {} construction...",building);
         }
         return true;
     }
