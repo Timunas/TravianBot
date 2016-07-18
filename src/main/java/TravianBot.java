@@ -4,11 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.MarionetteDriver;
+
 
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -199,6 +200,29 @@ public class TravianBot{
             LOG.info("Started {} construction...",building);
         }
         return true;
+    }
+
+    public boolean isUnderConstruction(){
+        try{
+            webDriver.findElements(By.xpath("//div[@class='buildDuration']"));
+        }catch(Exception e){
+            LOG.info("Nothing under construction...");
+            return false;
+        }
+        LOG.info("Constructions in progress!");
+        return true;
+    }
+
+    public Duration getTimeLeftForConstructionFinish(){
+        try{
+            String dirtyString = webDriver.findElement(By.xpath("//div[@class='buildDuration']")).getText();
+            String[] tokens = dirtyString.substring(0,dirtyString.indexOf(" ")).split(":");
+
+            return Duration.ofHours(Integer.valueOf(tokens[0])).ofMinutes(Integer.valueOf(tokens[1])).ofSeconds(Integer.valueOf(tokens[2]));
+        }catch(Exception e){
+            LOG.info("Nothing under construction...");
+            return null;
+        }
     }
 
 }
