@@ -18,7 +18,8 @@ public class BotRunner {
             travianBot.login("jenkins","pilas");
             Thread.sleep(2000);
             travianBot.goToBuildingsView();
-            travianBot.upgradeBuilding(Infrastructure.Hideout);
+            travianBot.goToEmptyBuildingSlot();
+            travianBot.newBuilding(Infrastructure.Embassy);
             Thread.sleep(10000);
             travianBot.closeBrowser();
         } catch (MalformedURLException e) {

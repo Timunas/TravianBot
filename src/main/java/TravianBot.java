@@ -175,7 +175,7 @@ public class TravianBot{
         else
             goToResourceBuildings();
         try{
-            webDriver.findElement(By.xpath("//div[@class='buildingWrapper']/h2[contains(text(), '"+building.toString()+"')]")).findElement(By.xpath("//button[@class='green new']")).click();
+            webDriver.findElement(By.xpath("//div[@class='buildingWrapper']/h2[contains(text(), '"+building.toString()+"')]/../div[@class='contract contractNew contractWrapper']/div[@class='contractLink']/button[@class='green new']")).click();
         }catch(Exception e){
             LOG.info("Couldn't start construction of building: "+building.toString());
             return false;
