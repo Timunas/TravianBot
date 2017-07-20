@@ -6,7 +6,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
- *
  * Travian Bot - main class
  * ______________________
  * created by Joao Suzana
@@ -19,6 +18,7 @@ public class TravianBot {
     private WebDriver driver;
     private boolean loggedIn;
     private WebDriverWait wait;
+    private NavigationBroker navigator;
 
 
     /**
@@ -47,13 +47,16 @@ public class TravianBot {
         //If no login element is present is because page couldn't be loaded
         this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("login")));
 
+        //Set navigation broker
+        this.navigator = new NavigationBroker(this.driver, this.wait);
+
     }
 
     /**
      * Close firefox driver
      */
     public void close() {
-        this.driver.close();
+        this.driver.quit();
         this.loggedIn = false;
     }
 
@@ -88,8 +91,18 @@ public class TravianBot {
         loginButton.click();
 
         //Wait for login successful - In this case we wait till contentContainer div (container having village fields)
-        this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("contentContainer")));
+        this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("village1")));
 
         this.loggedIn = true;
+    }
+
+
+    /**
+     * Returns Navigation Broker used to navigate through user account
+     *
+     * @return returns null if no NavigationBroker was initialized
+     */
+    public NavigationBroker getNavigationBroker() {
+        return this.navigator;
     }
 }
