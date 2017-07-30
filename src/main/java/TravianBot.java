@@ -32,6 +32,15 @@ public class TravianBot {
     }
 
     /**
+     * Get firefox driver
+     *
+     * @return returns null if no driver have been initialized
+     */
+    public WebDriver getDriver() {
+        return this.driver;
+    }
+
+    /**
      * Creates firefox driver and tries to go to travian server
      */
     public void init() {
