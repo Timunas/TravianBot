@@ -24,9 +24,6 @@ public class LoginTest {
 
     private TravianBot bot;
 
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
     @Before
     public void initBot(){
         this.bot = new TravianBot("http://ts6.travian.com");
