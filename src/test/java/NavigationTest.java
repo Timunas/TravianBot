@@ -48,37 +48,42 @@ public class NavigationTest {
         assertThat("Didn't logged in properly!",element,is(notNullValue()));
 
 
-        bot.getNavigationBroker().goToResourcesView();
+        this.bot.getNavigationBroker().goToResourcesView();
         element = this.bot.getDriver().findElement(By.className("village1"));
         assertThat("Didn't change to resources view!",element,is(notNullValue()));
 
-        bot.getNavigationBroker().goToInsideVillageView();
+        this.bot.getNavigationBroker().goToInsideVillageView();
         element = this.bot.getDriver().findElement(By.className("village2"));
         assertThat("Didn't change to inside village view!",element,is(notNullValue()));
 
-        bot.getNavigationBroker().goToMap();
+        this.bot.getNavigationBroker().goToMap();
         element = this.bot.getDriver().findElement(By.className("map"));
         assertThat("Didn't change to Map!",element,is(notNullValue()));
 
-        bot.getNavigationBroker().goToReports();
+        this.bot.getNavigationBroker().goToReports();
         element = this.bot.getDriver().findElement(By.className("reports"));
         assertThat("Didn't change to reports view!",element,is(notNullValue()));
 
-        bot.getNavigationBroker().goToStatistics();
+        this.bot.getNavigationBroker().goToStatistics();
         element = this.bot.getDriver().findElement(By.className("statistics"));
         assertThat("Didn't change to statistics view!",element,is(notNullValue()));
 
-        bot.getNavigationBroker().goToMessages();
+        this.bot.getNavigationBroker().goToMessages();
         element = this.bot.getDriver().findElement(By.className("messages"));
         assertThat("Didn't change to messages!",element,is(notNullValue()));
 
-        bot.getNavigationBroker().goToReports();
+        this.bot.getNavigationBroker().goToReports();
         element = this.bot.getDriver().findElement(By.className("reports"));
         assertThat("Didn't change to reports view!",element,is(notNullValue()));
 
-        bot.getNavigationBroker().goToReports();
+        this.bot.getNavigationBroker().goToReports();
         element = this.bot.getDriver().findElement(By.className("reports"));
         assertThat("Didn't change to reports view!",element,is(notNullValue()));
+
+        int number = this.bot.getNavigationBroker().getVillageNumber();
+        assertThat("Wrong village number",number,is(1));
+
+        this.bot.getNavigationBroker().goToMainVillage();
     }
 
     @After
