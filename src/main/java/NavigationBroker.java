@@ -4,6 +4,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * This class implements methods that help to navigate through user account
  * ______________________
@@ -118,6 +121,44 @@ public class NavigationBroker {
         messagesButton.click();
         this.wait.until(ExpectedConditions.
                 visibilityOfNestedElementsLocatedBy(By.className("contentContainer"), By.className("messages")));
+    }
+
+    /**
+     * Retrieve number of villages
+     *
+     * @return returns the number of villages
+     */
+    public int getVillageNumber() {
+        //Find side Bar class
+        WebElement sideBar = this.driver.findElement(By.id("sidebarBoxVillagelist"));
+
+        //Find side bar inner box class
+        WebElement sideBarInnerBox = sideBar.findElement(By.className("sidebarBoxInnerBox"));
+
+        //Find number of elements inside innerbox content dir
+        List<WebElement> elements = sideBarInnerBox.findElements(By.xpath(".//div[@class='innerBox content']/ul/li"));
+
+        return elements.size();
+    }
+
+    /**
+     * Go to main village
+     */
+    public void goToMainVillage() {
+        //Find side Bar class
+        WebElement sideBar = this.driver.findElement(By.id("sidebarBoxVillagelist"));
+
+        //Find side bar inner box class
+        WebElement sideBarInnerBox = sideBar.findElement(By.className("sidebarBoxInnerBox"));
+
+        //Find number of elements inside innerbox content dir
+        List<WebElement> elements = sideBarInnerBox.findElements(By.xpath(".//div[@class='innerBox content']/ul/li/a"));
+
+        Optional<WebElement> element = elements.stream().
+                filter(e -> e.getAttribute("accessKey").equals("b")).
+                findFirst();
+
+        element.ifPresent(WebElement::click);
     }
 
 }
