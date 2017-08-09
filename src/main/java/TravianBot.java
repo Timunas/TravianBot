@@ -19,6 +19,7 @@ public class TravianBot {
     private boolean loggedIn;
     private WebDriverWait wait;
     private NavigationBroker navigator;
+    private ResourcesBroker resourcesBroker;
 
 
     /**
@@ -58,6 +59,7 @@ public class TravianBot {
 
         //Set navigation broker
         this.navigator = new NavigationBroker(this.driver, this.wait);
+        this.resourcesBroker = new ResourcesBroker(this.driver, this.wait);
 
     }
 
@@ -113,5 +115,14 @@ public class TravianBot {
      */
     public NavigationBroker getNavigationBroker() {
         return this.navigator;
+    }
+
+    /**
+     * Returns Resources Broker used to perform tasks on village resources
+     *
+     * @return returns null if no ResourcesBroker was initialized
+     */
+    public ResourcesBroker getResourcesBroker() {
+        return this.resourcesBroker;
     }
 }
